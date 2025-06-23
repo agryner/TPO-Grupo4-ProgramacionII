@@ -2,18 +2,14 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import interfaces.INodo;
 
-public class Nodo implements INodo {
-	
+public class Esquina implements INodo {
     private int valor;
-    
     private List<INodo> vecinos = new ArrayList<>();
     private List<Integer> pesos = new ArrayList<>();
-    
 
-    public Nodo(int valor) {
+    public Esquina(int valor) {
         this.valor = valor;
     }
 

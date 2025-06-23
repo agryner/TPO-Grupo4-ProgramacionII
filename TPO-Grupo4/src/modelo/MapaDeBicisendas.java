@@ -3,29 +3,27 @@ package modelo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import interfaces.IGrafo;
 import interfaces.INodo;
 
-public class Grafo implements IGrafo {
-	
-    private Map<Integer, Nodo> nodos = new HashMap<>();
+public class MapaDeBicisendas implements IGrafo {
+    private Map<Integer, Esquina> nodos = new HashMap<>();
 
     public void agregarNodo(int valor) {
-        nodos.putIfAbsent(valor, new Nodo(valor));
+        nodos.putIfAbsent(valor, new Esquina(valor));
     }
 
     public void agregarArista(int origen, int destino, int peso) {
-        Nodo nodoOrigen = nodos.get(origen);
-        Nodo nodoDestino = nodos.get(destino);
+        Esquina nodoOrigen = nodos.get(origen);
+        Esquina nodoDestino = nodos.get(destino);
         if (nodoOrigen != null && nodoDestino != null) {
             nodoOrigen.agregarVecino(nodoDestino, peso);
-            nodoDestino.agregarVecino(nodoOrigen, peso); // Si es no dirigido
+            nodoDestino.agregarVecino(nodoOrigen, peso); // No dirigido
         }
     }
 
     public void mostrarListaAdyacencia() {
-        for (Nodo nodo : nodos.values()) {
+        for (Esquina nodo : nodos.values()) {
             System.out.print(nodo.getValor() + ": ");
             List<INodo> vecinos = nodo.getVecinos();
             List<Integer> pesos = nodo.getPesos();
@@ -35,12 +33,12 @@ public class Grafo implements IGrafo {
             System.out.println();
         }
     }
-    
-    public Nodo getNodo(int valor) {
+
+    public Esquina getNodo(int valor) {
         return nodos.get(valor);
     }
 
-    public Map<Integer, Nodo> getNodos() {
+    public Map<Integer, Esquina> getNodos() {
         return nodos;
     }
 }
