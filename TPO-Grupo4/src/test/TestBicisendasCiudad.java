@@ -32,11 +32,13 @@ public class TestBicisendasCiudad {
         if (test1 && test2 && test3 && test4) {
             System.out.println("Test de bicisendas en la ciudad PASÓ correctamente.");
         } else {
-            System.out.println(" Test de bicisendas FALLÓ.");
-            System.out.println("Resultados obtenidos:");
-            for (Map.Entry<Esquina, Integer> entry : distancias.entrySet()) {
-                System.out.println("Esquina " + entry.getKey().getValor() + " → Distancia: " + entry.getValue());
-            }
+            System.out.println("Test de bicisendas FALLÓ.");
+        }
+
+        // Mostrar distancias siempre
+        System.out.println("Distancias calculadas desde el nodo origen:");
+        for (Map.Entry<Esquina, Integer> entry : distancias.entrySet()) {
+            System.out.println("Esquina " + entry.getKey().getValor() + " → Distancia: " + entry.getValue());
         }
     }
 }
