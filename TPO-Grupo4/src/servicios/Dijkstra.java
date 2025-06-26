@@ -8,55 +8,48 @@ import java.util.*;
 public class Dijkstra {
 
     public static Map<Esquina, Integer> calcularDistancias(Map<Integer, Esquina> nodos, Esquina origen) {
-        Map<Esquina, Integer> distancias = new HashMap<>();
-        Set<Esquina> visitados = new HashSet<>();
-        PriorityQueue<NodoDistancia> cola = new PriorityQueue<>();
+        Map<Esquina, Integer> distancia = new HashMap<>();
+        Map<Esquina, Esquina> padre = new HashMap<>();
+        Set<Esquina> visitado = new HashSet<>();
 
-        // Inicializo distancias en infinito
+        // Cola de prioridad usando un comparador directo
+        PriorityQueue<Esquina> cola = new PriorityQueue<>(new Comparator<Esquina>() {
+            public int compare(Esquina a, Esquina b) {
+                return Integer.compare(distancia.get(a), distancia.get(b));
+            }
+        });
+
+        // Inicializo las distancias
         for (Esquina nodo : nodos.values()) {
-            distancias.put(nodo, Integer.MAX_VALUE);
+            distancia.put(nodo, Integer.MAX_VALUE);
+            padre.put(nodo, null);
         }
 
-        distancias.put(origen, 0);
-        cola.add(new NodoDistancia(origen, 0));
+        distancia.put(origen, 0);
+        cola.add(origen);
 
         while (!cola.isEmpty()) {
-            NodoDistancia actual = cola.poll();
-            Esquina nodoActual = actual.nodo;
+            Esquina actual = cola.poll();
 
-            if (visitados.contains(nodoActual)) continue;
-            visitados.add(nodoActual);
+            if (visitado.contains(actual)) continue;
+            visitado.add(actual);
 
-            List<INodo> vecinosGenericos = nodoActual.getVecinos();
-            List<Integer> pesos = nodoActual.getPesos();
+            List<INodo> vecinos = actual.getVecinos();
+            List<Integer> pesos = actual.getPesos();
 
-            for (int i = 0; i < vecinosGenericos.size(); i++) {
-                Esquina vecino = (Esquina) vecinosGenericos.get(i); // Cast necesario
+            for (int i = 0; i < vecinos.size(); i++) {
+                Esquina vecino = (Esquina) vecinos.get(i); // Cast necesario
                 int peso = pesos.get(i);
-                int nuevaDistancia = distancias.get(nodoActual) + peso;
+                int nuevaDist = distancia.get(actual) + peso;
 
-                if (nuevaDistancia < distancias.get(vecino)) {
-                    distancias.put(vecino, nuevaDistancia);
-                    cola.add(new NodoDistancia(vecino, nuevaDistancia));
+                if (!visitado.contains(vecino) && nuevaDist < distancia.get(vecino)) {
+                    distancia.put(vecino, nuevaDist);
+                    padre.put(vecino, actual);
+                    cola.add(vecino);
                 }
             }
         }
 
-        return distancias;
-    }
-
-    private static class NodoDistancia implements Comparable<NodoDistancia> {
-        Esquina nodo;
-        int distancia;
-
-        NodoDistancia(Esquina nodo, int distancia) {
-            this.nodo = nodo;
-            this.distancia = distancia;
-        }
-
-        @Override
-        public int compareTo(NodoDistancia otro) {
-            return Integer.compare(this.distancia, otro.distancia);
-        }
+        return distancia;
     }
 }
